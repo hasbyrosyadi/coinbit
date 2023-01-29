@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package proto;
+
+import "google/api/annotations.proto";
+
+option go_package = "./proto";
+
+message PostDeposit {
+  int64 walletID = 1;
+  float amount = 2;
+}
+
+message ResponsePostDeposit {
+  string Result = 1;
+}
+
+message DepositRequest {
+  int64 walletID = 1;
+}
+
+message ResponseGetDeposit {
+  int64 walletID = 1;
+  float balance = 2;
+  bool above_threshold = 3;
+}
+
+service DepositService {
+  rpc Deposit(PostDeposit) returns (ResponsePostDeposit) {
+      option (google.api.http) = {
+      post: "/deposit"
+    };
+  };
+  rpc GetDeposit(DepositRequest) returns (ResponseGetDeposit) {
+    option (google.api.http) = {
+      get: "/deposit/{walletID}"
+    };
+  };
+}

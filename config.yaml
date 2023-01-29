@@ -1,0 +1,8 @@
+
+kafka:
+  brokers:
+    - "127.0.0.1:9092"
+  group: "deposit"
+  stream: "deposit"
+  redis: "127.0.0.1:6379"
+  namespace: "producer"
