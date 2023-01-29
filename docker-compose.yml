@@ -28,7 +28,7 @@ services:
       KAFKA_NUM_PARTITIONS: 10
       KAFKA_DEFAULT_REPLICATION_FACTOR: 1
       KAFKA_REPLICATION_FACTOR: 1
-
+      
   redis:
     container_name: redis
     image: redis:latest

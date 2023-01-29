@@ -11,6 +11,10 @@ message PostDeposit {
   float amount = 2;
 }
 
+message RequestDeposit {
+  PostDeposit request = 1;
+}
+
 message ResponsePostDeposit {
   string Result = 1;
 }
@@ -26,9 +30,10 @@ message ResponseGetDeposit {
 }
 
 service DepositService {
-  rpc Deposit(PostDeposit) returns (ResponsePostDeposit) {
+  rpc Deposit(RequestDeposit) returns (ResponsePostDeposit) {
       option (google.api.http) = {
       post: "/deposit"
+      body: "request"
     };
   };
   rpc GetDeposit(DepositRequest) returns (ResponseGetDeposit) {

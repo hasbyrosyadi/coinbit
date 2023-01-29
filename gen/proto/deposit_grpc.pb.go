@@ -18,7 +18,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type DepositServiceClient interface {
-	Deposit(ctx context.Context, in *PostDeposit, opts ...grpc.CallOption) (*ResponsePostDeposit, error)
+	Deposit(ctx context.Context, in *RequestDeposit, opts ...grpc.CallOption) (*ResponsePostDeposit, error)
 	GetDeposit(ctx context.Context, in *DepositRequest, opts ...grpc.CallOption) (*ResponseGetDeposit, error)
 }
 
@@ -30,7 +30,7 @@ func NewDepositServiceClient(cc grpc.ClientConnInterface) DepositServiceClient {
 	return &depositServiceClient{cc}
 }
 
-func (c *depositServiceClient) Deposit(ctx context.Context, in *PostDeposit, opts ...grpc.CallOption) (*ResponsePostDeposit, error) {
+func (c *depositServiceClient) Deposit(ctx context.Context, in *RequestDeposit, opts ...grpc.CallOption) (*ResponsePostDeposit, error) {
 	out := new(ResponsePostDeposit)
 	err := c.cc.Invoke(ctx, "/proto.DepositService/Deposit", in, out, opts...)
 	if err != nil {
@@ -52,7 +52,7 @@ func (c *depositServiceClient) GetDeposit(ctx context.Context, in *DepositReques
 // All implementations must embed UnimplementedDepositServiceServer
 // for forward compatibility
 type DepositServiceServer interface {
-	Deposit(context.Context, *PostDeposit) (*ResponsePostDeposit, error)
+	Deposit(context.Context, *RequestDeposit) (*ResponsePostDeposit, error)
 	GetDeposit(context.Context, *DepositRequest) (*ResponseGetDeposit, error)
 	mustEmbedUnimplementedDepositServiceServer()
 }
@@ -61,7 +61,7 @@ type DepositServiceServer interface {
 type UnimplementedDepositServiceServer struct {
 }
 
-func (UnimplementedDepositServiceServer) Deposit(context.Context, *PostDeposit) (*ResponsePostDeposit, error) {
+func (UnimplementedDepositServiceServer) Deposit(context.Context, *RequestDeposit) (*ResponsePostDeposit, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Deposit not implemented")
 }
 func (UnimplementedDepositServiceServer) GetDeposit(context.Context, *DepositRequest) (*ResponseGetDeposit, error) {
@@ -81,7 +81,7 @@ func RegisterDepositServiceServer(s grpc.ServiceRegistrar, srv DepositServiceSer
 }
 
 func _DepositService_Deposit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PostDeposit)
+	in := new(RequestDeposit)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -93,7 +93,7 @@ func _DepositService_Deposit_Handler(srv interface{}, ctx context.Context, dec f
 		FullMethod: "/proto.DepositService/Deposit",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DepositServiceServer).Deposit(ctx, req.(*PostDeposit))
+		return srv.(DepositServiceServer).Deposit(ctx, req.(*RequestDeposit))
 	}
 	return interceptor(ctx, in, info, handler)
 }

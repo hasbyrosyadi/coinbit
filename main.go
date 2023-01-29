@@ -3,7 +3,6 @@ package main
 import (
 	"coinbit-test/config"
 	pb "coinbit-test/gen/proto"
-	"coinbit-test/kafka"
 	"coinbit-test/server/usecase"
 	"context"
 	"flag"
@@ -11,8 +10,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"strconv"
-	"time"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 
@@ -34,43 +31,43 @@ var (
 )
 
 func main() {
-	flag.Parse()
+	// flag.Parse()
 
-	conf, err := readConfig(*filename)
-	if err != nil {
-		log.Fatal(err)
-	}
+	// conf, err := readConfig(*filename)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 
-	fmt.Println("data", conf.Kafka)
+	// fmt.Println("data", conf.Kafka)
 
-	// consuming
-	go func() {
-		err := kafka.Consume(new(nopPublisher), conf.Kafka.Brokers, conf.Kafka.Group,
-			conf.Kafka.Stream, conf.Kafka.Redis, conf.Kafka.Namespace)
-		if err != nil {
-			log.Fatal(err)
-		}
-	}()
+	// // consuming
+	// go func() {
+	// 	err := kafka.Consume(new(nopPublisher), conf.Kafka.Brokers, conf.Kafka.Group,
+	// 		conf.Kafka.Stream, conf.Kafka.Redis, conf.Kafka.Namespace)
+	// 	if err != nil {
+	// 		log.Fatal(err)
+	// 	}
+	// }()
 
-	// producing
-	producer, err := kafka.NewProducer(conf.Kafka.Brokers, conf.Kafka.Stream)
-	if err != nil {
-		log.Fatal("disni", err)
-	}
-	for {
-		// for testing
-		event := &config.Event{
-			WalletID: 1,
-			Amount:   10000,
-		}
-		fmt.Printf("emit -> key:`%v` ->event: `%v`\n", event.WalletID, event)
-		strWalletID := strconv.Itoa(event.WalletID)
-		err = producer.Emit(strWalletID, event)
-		if err != nil {
-			log.Fatal(err)
-		}
-		time.Sleep(5 * time.Second)
-	}
+	// // producing
+	// producer, err := kafka.NewProducer(conf.Kafka.Brokers, conf.Kafka.Stream)
+	// if err != nil {
+	// 	log.Fatal("disni", err)
+	// }
+	// for {
+	// 	// for testing
+	// 	event := &config.Event{
+	// 		WalletID: 1,
+	// 		Amount:   10000,
+	// 	}
+	// 	fmt.Printf("emit -> key:`%v` ->event: `%v`\n", event.WalletID, event)
+	// 	strWalletID := strconv.Itoa(event.WalletID)
+	// 	err = producer.Emit(strWalletID, event)
+	// 	if err != nil {
+	// 		log.Fatal(err)
+	// 	}
+	// 	time.Sleep(5 * time.Second)
+	// }
 
 	mux := runtime.NewServeMux()
 

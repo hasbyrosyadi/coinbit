@@ -54,6 +54,7 @@ func Consume(pub Publisher, brokers []string, group string, stream string, store
 		client := redis.NewClient(&redis.Options{
 			Addr: store,
 		})
+
 		opts = append(opts, goka.WithStorageBuilder(storage.RedisBuilder(client, namespace)))
 		defer client.Close()
 	}
