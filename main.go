@@ -31,6 +31,8 @@ var (
 )
 
 func main() {
+	// testing implement kafka
+
 	// flag.Parse()
 
 	// conf, err := readConfig(*filename)
